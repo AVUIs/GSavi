@@ -1,0 +1,57 @@
+# GSavi
+beta code
+
+GS.avi is a gestural instrument that generates continuous spatial visualizations and music from the input of a performer. The features extracted form a performer’s gesture defines the color, position, form and orientation of a 3-demensional Delaunay mesh. The music, composed using granular synthesis, is generated from features extracted from the mesh. The project was created using Processing and MAX/MSP. OSC is used to communicate between the two.
+
+To use this patch, copy and paste the enclosed compressed text into max/msp.
+start the processing sketch. 
+to begin drawing the mesh, use the trackpad or mouse within the max patch.
+
+<pre><code>
+----------begin_max5_patcher----------
+1895.3oc6btsjaZDDF95ceJTQkK2PlyGxc4YHW5JUJVIxt3RBoBPNqiK+tmA
+jVzfs0PqMJ8fv9F6UnS87we2+8LLnOc+cIOt8k75jE+5h2s3t69z82cW2gZO
+vcGe7cIaxdY45r5tWVR85hU4UIOb3oJ2uonbcdS2yQOdvsUE4kMYMEaK8Or6
+0tceyW8h6NTyG2keHJRRV7GGepcYMKetn7o+rJeYygmUKYoFl0JUOrfwIoVE
+gvXOrPxSItiHRI8u6hUcw61Ge+OaXI8ejUYaxaxq9y7xrGW28cRZepOe+8s+
+yC.ofar73HTX3vkc7n+01xl5h+o6Kl1FzmgBEkMIOrH4wrxmfCDkMUK6gA8L
+vfm3EKkNbz8T+VUQ15qMlhqXwnHoDt0pMNZHooTp0ApQEKjYqXY.PL1TKw82
+7QELT7DLk4+s6q70O0l7W5h7jprxUa2rP9MYHKnj4RXXX1I5YGUoRsNwjwwN
+kLD6zp.r6MvmlsO8jitvkRz273kxNMdMmFuLR23kblwqFIEg6itZqKLHj+qZ
+B140DimP4AIl6u4bW.4rizrfPxbcEEgSZTwLowiObFKUpc7QOZRiES9PIQDP
+ZGIrN.IntrLgIUobVTNXoCVQVcyVUQ6DD8iWEzpJJjqpHiaUkAPxBsphx78S
+ViGf3jSkUBm0nY3BnXRHIimxUGZ2k55zU4lmDQ7vBCIXcExsZcEgV2MdUsiW
+Wq9bsarOZYEJ1MqDypJCPjVkpsNIgs2K9bL5JmzD2YDJ4l9zBFQmxDNFL5LB
+U7Y6LBG.DgJkvrcINgmQnRLUlQXbqx5mRwL5d5MRUVIl9PbULID2YIqHtd7j
+G5ukaNjvElPRwspOD2Mj5GuZWkUmdPqFyHRJQ0HhFWiHeF47DSkjC0eBaDIU
+yIiHtgchAGWG61NXCaDI0yVinA.Az5XKMSESnHWh0KchSIcjajxq3t9JrnNU
+QtalhtbKyk3+HtYWeE2Hpe3dz9wRGy9Qnw19Ip9OdLpy9wEONDooAQjYN49X
+XmH.XyGgc9dcw73ALumIykDKtUW8Rk.Z8v+9YtOLFOkocFyhKw6gey58P0jt
+wa6Lfga9vM3Z9vjQ07wGR9tOAWZetcN49v3z97hKv9Y9tGdF.DP9OBwOl6yW
+lMAy.RH+94h.oD7TkvZUbWAYtIk0tcIniQHl8V0.RZImFuRUpP4xoFcw2Xpu
+qLfF.ICM0brqjvNPL4bxARIo8Lvea6D1AhZlsNPC.xWuSIOSkBpEQWnIyULy
+K+gyghJF8GWwrujdLKqmdiXIcs24FWEwD6Jz4m27mUh9qDqLngEEvF31MbK1
+reyg3jDRf85ann702vaQysIutN6o7uRz8Kq1W0UBewOQ+ez0CJjEtdDeExZQ
+Kjoly.YwLUxMnkY3ZN5Eo4byJHhZtcOmUmGQAmOh8UbJdPE2bsH2fKPEXEm8
+FRv4Hv5XJ37I7.AGInfiLSEb9aKG3BN8k4pRtPAG8ZJ3pWlsNuJhJNeDOPwE
+zT8JeQzNOd1kmuJhzwuKW3F.pYZ53fcqM3zwKqIWVLyF2j8TYQy9UwzBvGx9
+Rt1ck34kby1lbIbRJUQHbgCGbS+lcNrlicYV.BBBMcLcXJkp5tOB5Xp6SDFS
+0jKBpVRLajyww57euIqIloxFis+llyOU1JCkJKY2r2oodiWe+AlH3dg7peaZ
+eNUwtsqWGsoRRbmuUxC2l1bltOoiYSkApqiy1rnKcotMc4BzIx2V8oy9evwm
+Vziui2oXma2dQQpQ0OFyUofRjmpmK87HC1kpffDadIhrwZY8xFezvC1MEWOS
+amZvswM7N3EWjyuLhcv+jqJ19pnZ56g3AqRMMnhCmao08q1UmWtZw5sKyV+7
+15F2YdB8BDljvn5a9ysgomGJsrkGFc29XPGTyAr5T26MYcQ4W9ieTWnzd7gT
+pd69pkudh70aI8EmBgUNATQY+Eq9cmtkr8dQOWrZUdoOOVUT2JwWc9VV.GOF
+.wS6c.MVwiBJennDOZHmuz3c9RqfFOHwGP5GKZ7o8Vhaz3QpvKdfb9RhHeDP
+4CN5GCCP7z9SOFV4WPhG7Bm1eTwFGOTzhGAD4r.uxOBMz3AI9.obnDO8CER5
+NmfW7vlXwCYZEOloU3nlVgyDSLymXhYEERuyH1KOD9nj3EODn7AGyKk.JePJ
+dfz6rFuSWbH3QfWqyV.wChcxCo0GIds9HMPmoCNpYIEZqXHEOPjyT7ZMT.QN
+KwapELHMavvysfAoZHCO2TlEJevQOyA0qJd0C4P3i.O8CWAkOHMUYAT9fT7.
+I+hh3Ra.oaUAdsav.0MOdgCD7vv6zE0Bs7LNxYJjxgT7JGRA0tAdxYJD4LEO
+6THxGJdycGRy730KODsCdRm1sUiWV7YR0wahNPVFAIdwCWOwVktI1ZpJmXKS
+m.T1EE2zK1XK6CA23Yz7KxzhOBxzpbHGu0oiCZY4eq0COriax1s6C4U0G+L6
+BkjMYueaU6CUOb+g830gG1sUhRpx+Pwqudc2QxpV9bQS9x1crU2t64EiJ491
+umOe++ZmYmiK
+-----------end_max5_patcher-----------
+</code></pre>
+
