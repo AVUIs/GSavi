@@ -1,57 +1,17 @@
 # GSavi
 beta code
 
-GS.avi is a gestural instrument that generates continuous spatial visualizations and music from the input of a performer. The features extracted form a performer’s gesture defines the color, position, form and orientation of a 3-demensional Delaunay mesh. The music, composed using granular synthesis, is generated from features extracted from the mesh. The project was created using Processing and MAX/MSP. OSC is used to communicate between the two.
+GS.avi is a gestural instrument that generates continuous spatial visualizations and music from the input of a performer. The features extracted form a performer’s gesture defines the color, position, form and orientation of a 3-dimensional Delaunay mesh. The music, composed using granular synthesis, is generated from features extracted from the mesh. The project was created using Processing and MAX/MSP. OSC is used to communicate between the two.
 
 To use this patch, copy and paste the enclosed compressed text into max/msp.
-start the processing sketch. 
+start the processing sketch. enable all toggle switches before drawing.
 to begin drawing the mesh, use the trackpad or mouse within the max patch.
 
-<pre><code>
-----------begin_max5_patcher----------
-1895.3oc6btsjaZDDF95ceJTQkK2PlyGxc4YHW5JUJVIxt3RBoBPNqiK+tmA
-jVzfs0PqMJ8fv9F6UnS87we2+8LLnOc+cIOt8k75jE+5h2s3t69z82cW2gZO
-vcGe7cIaxdY45r5tWVR85hU4UIOb3oJ2uonbcdS2yQOdvsUE4kMYMEaK8Or6
-0tceyW8h6NTyG2keHJRRV7GGepcYMKetn7o+rJeYygmUKYoFl0JUOrfwIoVE
-gvXOrPxSItiHRI8u6hUcw61Ge+OaXI8ejUYaxaxq9y7xrGW28cRZepOe+8s+
-yC.ofar73HTX3vkc7n+01xl5h+o6Kl1FzmgBEkMIOrH4wrxmfCDkMUK6gA8L
-vfm3EKkNbz8T+VUQ15qMlhqXwnHoDt0pMNZHooTp0ApQEKjYqXY.PL1TKw82
-7QELT7DLk4+s6q70O0l7W5h7jprxUa2rP9MYHKnj4RXXX1I5YGUoRsNwjwwN
-kLD6zp.r6MvmlsO8jitvkRz273kxNMdMmFuLR23kblwqFIEg6itZqKLHj+qZ
-B140DimP4AIl6u4bW.4rizrfPxbcEEgSZTwLowiObFKUpc7QOZRiES9PIQDP
-ZGIrN.IntrLgIUobVTNXoCVQVcyVUQ6DD8iWEzpJJjqpHiaUkAPxBsphx78S
-ViGf3jSkUBm0nY3BnXRHIimxUGZ2k55zU4lmDQ7vBCIXcExsZcEgV2MdUsiW
-Wq9bsarOZYEJ1MqDypJCPjVkpsNIgs2K9bL5JmzD2YDJ4l9zBFQmxDNFL5LB
-U7Y6LBG.DgJkvrcINgmQnRLUlQXbqx5mRwL5d5MRUVIl9PbULID2YIqHtd7j
-G5ukaNjvElPRwspOD2Mj5GuZWkUmdPqFyHRJQ0HhFWiHeF47DSkjC0eBaDIU
-yIiHtgchAGWG61NXCaDI0yVinA.Az5XKMSESnHWh0KchSIcjajxq3t9JrnNU
-QtalhtbKyk3+HtYWeE2Hpe3dz9wRGy9Qnw19Ip9OdLpy9wEONDooAQjYN49X
-XmH.XyGgc9dcw73ALumIykDKtUW8Rk.Z8v+9YtOLFOkocFyhKw6gey58P0jt
-wa6Lfga9vM3Z9vjQ07wGR9tOAWZetcN49v3z97hKv9Y9tGdF.DP9OBwOl6yW
-lMAy.RH+94h.oD7TkvZUbWAYtIk0tcIniQHl8V0.RZImFuRUpP4xoFcw2Xpu
-qLfF.ICM0brqjvNPL4bxARIo8Lvea6D1AhZlsNPC.xWuSIOSkBpEQWnIyULy
-K+gyghJF8GWwrujdLKqmdiXIcs24FWEwD6Jz4m27mUh9qDqLngEEvF31MbK1
-reyg3jDRf85ann702vaQysIutN6o7uRz8Kq1W0UBewOQ+ez0CJjEtdDeExZQ
-Kjoly.YwLUxMnkY3ZN5Eo4byJHhZtcOmUmGQAmOh8UbJdPE2bsH2fKPEXEm8
-FRv4Hv5XJ37I7.AGInfiLSEb9aKG3BN8k4pRtPAG8ZJ3pWlsNuJhJNeDOPwE
-zT8JeQzNOd1kmuJhzwuKW3F.pYZ53fcqM3zwKqIWVLyF2j8TYQy9UwzBvGx9
-Rt1ck34kby1lbIbRJUQHbgCGbS+lcNrlicYV.BBBMcLcXJkp5tOB5Xp6SDFS
-0jKBpVRLajyww57euIqIloxFis+llyOU1JCkJKY2r2oodiWe+AlH3dg7peaZ
-eNUwtsqWGsoRRbmuUxC2l1bltOoiYSkApqiy1rnKcotMc4BzIx2V8oy9evwm
-Vziui2oXma2dQQpQ0OFyUofRjmpmK87HC1kpffDadIhrwZY8xFezvC1MEWOS
-amZvswM7N3EWjyuLhcv+jqJ19pnZ56g3AqRMMnhCmao08q1UmWtZw5sKyV+7
-15F2YdB8BDljvn5a9ysgomGJsrkGFc29XPGTyAr5T26MYcQ4W9ieTWnzd7gT
-pd69pkudh70aI8EmBgUNATQY+Eq9cmtkr8dQOWrZUdoOOVUT2JwWc9VV.GOF
-.wS6c.MVwiBJennDOZHmuz3c9RqfFOHwGP5GKZ7o8Vhaz3QpvKdfb9RhHeDP
-4CN5GCCP7z9SOFV4WPhG7Bm1eTwFGOTzhGAD4r.uxOBMz3AI9.obnDO8CER5
-NmfW7vlXwCYZEOloU3nlVgyDSLymXhYEERuyH1KOD9nj3EODn7AGyKk.JePJ
-dfz6rFuSWbH3QfWqyV.wChcxCo0GIds9HMPmoCNpYIEZqXHEOPjyT7ZMT.QN
-KwapELHMavvysfAoZHCO2TlEJevQOyA0qJd0C4P3i.O8CWAkOHMUYAT9fT7.
-I+hh3Ra.oaUAdsav.0MOdgCD7vv6zE0Bs7LNxYJjxgT7JGRA0tAdxYJD4LEO
-6THxGJdycGRy730KODsCdRm1sUiWV7YR0wahNPVFAIdwCWOwVktI1ZpJmXKS
-m.T1EE2zK1XK6CA23Yz7KxzhOBxzpbHGu0oiCZY4eq0COriax1s6C4U0G+L6
-BkjMYueaU6CUOb+g830gG1sUhRpx+Pwqudc2QxpV9bQS9x1crU2t64EiJ491
-umOe++ZmYmiK
------------end_max5_patcher-----------
-</code></pre>
+<pre><code>----------begin_max5_patcher----------1886.3oc6b9rbaaCDF+r8SgFN8nJKvh+2a8YnGyzICsDqMyHQpgjJ0oYx6dAojo.qs.W6Pi.akKI1jRhK9wuc+V.B4ud8UI2TcedSxheewGVb0Ue85qtp+PcG3pi+9UIayte0lrl9WVRylh040IKObpx8aq12tIus+jziGcWVc117175OlWlcyl7tyQNdtp5h7x1r1hpR22xgOk1urK+Pvjjr3uNcMJJe7knc0cEk29w57UsGdKJAjpAiQHWt.XjTijP.X4BAKkXOBOkL7QVrterTcym9UMjzcruc80c+yRjTvFS2bNJ.HnveWU1VZOa+G1eTWjsIw4LME+a+YncQ9Y3SQYaxxEI2jUd62IpjlTkX.SzyfI1KASwqXQKIoDlwnz1wrflRoFKNlTrPt.EKiPk1jZH1elMofg9hPU9+XeyOL7ZyuuOFRpyJWWscgvuRZd3zSyGvGe3C7gJkoFqTRa4iT3iOJ4KgOsU2dqUb7xSnvOh8oHnvoQr9zHFH8iXxYFwpYTQXGf0UKXDBYVzDv40DdRZ.bHBr+LqKTslQJpWDom+jFYblz3vGF.oBkkOpISZLyOenjnDPJKILV.wo1bLtNUJsFTVXo7V0U9FtphxJIFFwRrUUjyeUEPDqUUFgHiSUEvKhzWNYMN.hQNUVweViBdM.TbRHAvRYxCM6Rs84JsyRhvWtPS7VWg71stBWo5GwxtQrsUelxN5mrrBc9KqDqUUFAHkLUYrRByfW74HD79ZFgBldHw.HpTfaovjyHTxt.mQ3HTwkoDvzmR4eFgR9kSUV2TJPqFHzDUYEyOgXx3jPLqkrjX6vSbn+Vl9P5leBI3uc8gX1A0vHVYqsZUDJ4TFQBwraDQiUiHWBYcKSEjC0X7aDIjuuLhXZ3DENtN1c8v52HRnt.MhFgJTqisPeAUh0IchQI8zYhxquFquBDoSUjYmonMyR+b7e3ugWeE6XZX.ez9wPmx9gqdMrehT+GGB0a+XiT5TKYKW+N6AiAmX.ZyGt4R74h4PJbdOzKmpqNoRHsdXWNFy.vRAk0Xl+b7dXug8dnJR+HtaNv3MeX5427ADQp4iKhbce7tz9Ly6K2GfQGxLdF1OWh6gmQnBk+Cme4Th0MaBmAD+UXw2hT3H4rTI2XjLa0XlNEr0a5q03U9.l2t9OBC4zHVHS4Rahyjq8FHuf7eFgHMMUeroD+FPf38kAjTPGnf691wuADUeAZ.MBUOdKTdlpHzHaph1KSw18a6Ng7gWsc7+vwDA84p4jBxXXIJPuXLtbADXfA.MgwEDsRN6z2erli7Lq2+80FoyD0k7gGqqvqwH8EMY8s4MMY2l+HM2usdeces7E+B801a76ZkL31FIe.PJdGfn5y.HdzJ4XxezRtQ8liWyQmUM2t6xZxiRAmKdbUbRlWEG7SEGtmDFZEmYVEb1.eSbJ3boyHAGwqfiDutpjmPvQCofyc++fWvolUAWyprM40QohyEOiTbdMU0yKd1kmuNJoiaWt3M.jQb53O3rwQ6JbzYiyaOtaytsrnc+53zBvkPtRttst34kbwVSt+n5mkvHoTIgv3V5wzCafZ+5K3mzqmdTpr+agPO8rWFbzSQl2zyp8M4+YaVablep0lgutbt4mFgu7SA7F96XpyH1slMv8tKHmUUwtpMahv4GRr2ukhCeIrYfZHgALoBOEqmyMXQe5RSW5xSyGwrwmi0VN6+8BpV6hOEe.eGWDwysOul2ke3Kw4ROPIhS0hENNYda8jOu0huOJYiw.CxFWzv71hDSEsskK9A2U9nuB336JmOqZsasUw1WGol9N.ZzROS8p3lyuLq6WuqIub8hMUqx1bWUSq8tC4Lnh7RQE9+PjnG3gTI53gV0uEFTdULipN0+JR1TT9++ydT+Er63ioTS095UObO7vpBtbwoqyZq9onb3IQ+gg0Fy8EcWw504ktLZcQSWNaePRdxaWXCGMfHdzrvEOTDwipChzvDODL7gFN9fHbXgS9nvHms0bCV7nwJeBT7nvDO5vEORrwSXRuTXJ+DtpOXtaEtaVRThYHbwCF7HCHejXimvHlkBL2uBGd3XviHb3ggIdBmWgDvxm.EOXZ8QFvzcB13IP5m3p0GAlVeBWmFBLlEhv03r.iYgHblEBIV9Dn3AiYw+KneUiGN13IP5GLtEzv0Zn.hrxOXbK5gXftegwsPDN2KNlxyhvMwctF68q.EOXpOyCW8YtDa7DF8LGS8YZ.0OXpOyCW27bL0m4AjOXpOyC2rK5G5vTSFjD13Yx5Oj3hO7.GOzo72UwU7DP6TRb09COtBGlAa04.EOndNAga1NLUjc+RhkOgwMkgROGtzcVjMaGTMaDrnAvjsCgqWLPhMdBDevz6LDN0LfQMCgqWU.0J8FrvgZvd6JLxYJFyKZ3LunQVyFTTKMV3JGRiLyBJlzKZ3J+PeU6c9vNRJa2tOmW2b7yrOTR1l8op59+xDr75CaTuC+Z+djJoN+yEO75U8GIqd0cEs4q51Qa8a+o60ceqfrWmuc8+YrPlfF-----------end_max5_patcher-----------</code></pre>
 
+# Dependencies
+Install He_Mesh and oscP5 libraries into Documents/Processing/libraries:
+He_Mesh Library: http://hemesh.wblut.com/hemesh-latest.zip
+oscP5 Library: http://www.sojamo.de/libraries/oscP5/download/oscP5-0.9.8.zip
+
+A guide to installing libraries can be found here: http://www.learningprocessing.com/tutorials/libraries/
