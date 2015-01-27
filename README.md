@@ -12,8 +12,8 @@ To begin drawing the mesh, use the trackpad or mouse within the max patch.
 # Dependencies
 Install He_Mesh and oscP5 libraries into Documents/Processing/libraries:
 
-He_Mesh Library: <a href = “http://hemesh.wblut.com/hemesh-latest.zip”>HE_MESH</a>
+He_Mesh Library: http://hemesh.wblut.com/hemesh-latest.zip
 
-oscP5 Library: <a href = “http://www.sojamo.de/libraries/oscP5/download/oscP5-0.9.8.zip”>oscP5</a>
+oscP5 Library: http://www.sojamo.de/libraries/oscP5/download/oscP5-0.9.8.zip
 
 A guide to installing libraries can be found here: http://www.learningprocessing.com/tutorials/libraries/
