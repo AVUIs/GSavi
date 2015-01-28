@@ -1,4 +1,4 @@
-# GSavi
+# GS.avi
 beta code
 
 GS.avi is a gestural instrument that generates continuous spatial visualizations and music from the input of a performer. The features extracted form a performer’s gesture defines the color, position, form and orientation of a 3-dimensional Delaunay mesh. The music, composed using granular synthesis, is generated from features extracted from the mesh. The project was created using Processing and MAX/MSP. OSC is used to communicate between the two.
