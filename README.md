@@ -21,7 +21,7 @@ F. Repeat step E to change the range of values for HEIGHT by selecting the numbe
 
 G. Lock the patcher by selecting the lock icon on the lower left of the patcher. The lock should appear locked.
 
-H. Click all of the white boxes at the top left of each object cluster for the objects “/duration”, “/phase”, “/angle”, “/scaler”, “magnitude”, and “gesture” to enable the toggle switches. An “X” should appear in all of the boxes. Numbers should start to generate for each object.  
+H. Click all of the white boxes at the top left of each object cluster for the objects “/duration”, “/phase”, “/angle”, “/scaler”, “/magnitude”, and “/gesture” to enable the toggle switches. An “X” should appear in all of the boxes. Numbers should start to generate for each object.  
 
 I. When the mouse is clicked and dragged in the patcher window, an “X” will appear in the toggle box for the “/mouseState” object to verify the mouse is in its down state to enable sending information to the Processing sketch. 
 
