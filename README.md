@@ -13,11 +13,11 @@ A. To import the patch into MAX/MSP, Copy and Paste the enclosed compressed text
 
 B. To map the MAX/MSP patch to your display window, unlock the MAX/MSP patch by selecting the lock icon on the bottom left of the patcher window by clicking once. The lock should appear open. This action unlocks all of the objects in the patcher window. 
 
-C. Select the number box to the right of “/x”. Select the “i” icon (fourth from the left) in the row if icons at the bottom of the patcher window to open the 	Inspector window. 
+C. Select the number box to the right of “/x”. Select the “i” icon (fourth from the left) in the row if icons at the bottom of the patcher window to open the Inspector window for MAX 6. In Max 7, the Inspector can be accessed by the recessed script “i” icon (second from the top) along the right side of the patcher window.
 
 D. Scroll to the bottom of the list of parameters to access the options in the “Value” list. 
 
-E. To change the range of values for the WIDTH to match your display or desired active area for the Processing sketch to run, double-click the “0” next to the 	right of “Minimum”. Change the value. Then double-click the “<none>” next to “Maximum”. Change the value. Close the Inspector window. 
+E. To change the range of values for the WIDTH to match your display or desired active area for the Processing sketch to run, double-click the “0” next to the right of “Minimum”. Change the value. Then double-click the “<none>” next to “Maximum”. Change the value. Close the Inspector window. 
 
 F. Repeat step E to change the range of values for HEIGHT by selecting the number box above the “/y” object in the patcher window. 
 
