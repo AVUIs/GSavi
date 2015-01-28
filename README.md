@@ -5,6 +5,8 @@ GS.avi is a gestural instrument that generates continuous spatial visualizations
 
 # Usage
 
+NOTE: This MAX/MSP patch is a simulation to test that the Processing sketch generates visuals. There is no sound. 
+
 # 1: To use this patch:
 
 A. To import the patch into MAX/MSP, Copy and Paste the enclosed compressed text into the patcher window OR Copy and from the MAX/MSP menu, choose File > New From Clipboard. 
