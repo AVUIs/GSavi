@@ -22,7 +22,7 @@ import netP5.*;
 OscP5 oscP5;
 NetAddress myRemoteLocation;
 
-// declare sketch variables and objects
+// declare sketch variable input objects
 IntList xMouse;
 IntList yMouse;
 
@@ -39,13 +39,12 @@ int explodeProp = 0;
 int skipPoints = 1;
 
 boolean active = false;
+// manages weighting of different drawing modes
 int [] randomChoice = {0, 0, 0, 0, 0, 0, 0, 1, 2, 1};
 
 int sketchRate;
 
 // declare OSC message received variables
-int mouseState;
-int xPos, yPos, zPos;
 int magVal;
 int durVal;
 int gestureVal = 1;
@@ -98,8 +97,6 @@ void setup() {
   myRemoteLocation = new NetAddress("127.0.0.1", 5001);
   
   // plug message communication between OSC messages and sketch
-  oscP5.plug(this, "x", "/x");
-  oscP5.plug(this, "y", "/y");
   oscP5.plug(this, "gesture", "/gesture");
   oscP5.plug(this, "scaler", "/scaler");
   oscP5.plug(this, "phase", "/phase");
@@ -132,17 +129,20 @@ void setup() {
   render = new WB_Render3D(this);
 }
 
+// set preview to full screen
+boolean sketchFullScreen()
+{
+  return true;
+}
+
 void oscEvent(OscMessage theOscMessage) {
 
   // verifies received messages in the console
-  // println("OSC Message received: ");
-  // println(theOscMessage.addrPattern() + " ");
+  println("OSC Message received: ");
+  println(theOscMessage.addrPattern() + " ");
 
   // check OSC message patterns and assign them to variables
-  if(theOscMessage.checkAddrPattern("/mouseState") == true) mouseState = theOscMessage.get(0).intValue();
-  else if(theOscMessage.checkAddrPattern("/gesture") == true) gestureVal = theOscMessage.get(0).intValue(); 
-  else if(theOscMessage.checkAddrPattern("/x") == true) xPos = theOscMessage.get(0).intValue(); 
-  else if(theOscMessage.checkAddrPattern("/y") == true) yPos = theOscMessage.get(0).intValue();
+  if(theOscMessage.checkAddrPattern("/gesture") == true) gestureVal = theOscMessage.get(0).intValue(); 
   else if(theOscMessage.checkAddrPattern("/scaler") == true) scaleVal = theOscMessage.get(0).intValue()/100f;
   else if(theOscMessage.checkAddrPattern("/phase") == true) phaseVal = radians(theOscMessage.get(0).intValue());
   else if(theOscMessage.checkAddrPattern("/speed") == true) speedVal = theOscMessage.get(0).intValue();
@@ -153,9 +153,9 @@ void oscEvent(OscMessage theOscMessage) {
 
 void create() {
   // start collecting mesh data when the mouse is dragged
-  if(mouseState == 1) {
-    xMouse.append(xPos);
-    yMouse.append(yPos);
+  if(mousePressed) {
+    xMouse.append(mouseX);
+    yMouse.append(mouseY);
 
     // initialize list for gesture data
     meshPoints = new ArrayList <WB_Point>();
@@ -165,7 +165,7 @@ void create() {
     // magnify the effect to make visible in the mesh
     int multiplier = skipPoints * magVal;
 
-    zPos = (int)random(height);
+    int zPos = (int)random(height);
     float[] point = new float[3];
 
     for (int i = 0; i < xMouse.size(); i ++) {
@@ -195,7 +195,7 @@ void create() {
     triangulation = WB_Delaunay.getTriangulation3D(meshPoints, 0.001);
   }
     // clear mesh data for new gesture
-    else if(mouseState == 0) {
+    else if(!mousePressed) {
     xMouse.clear();
     yMouse.clear();
     meshData = new PVector[xMouse.size()];
@@ -203,6 +203,8 @@ void create() {
 }
 
 void draw() {
+  // hides cursor from view
+  noCursor();
   // vary framerate
   sketchRate = (int)random(5, speedVal);
   frameRate(sketchRate);
