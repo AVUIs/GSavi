@@ -22,7 +22,7 @@ import netP5.*;
 OscP5 oscP5;
 NetAddress myRemoteLocation;
 
-// declare sketch variable input objects
+// declare sketch variables and objects
 IntList xMouse;
 IntList yMouse;
 
@@ -31,41 +31,45 @@ PVector [] meshData;
 color fillColor;
 color strokeColor;
 
+int duration = millis();
 int lifetime;
 int activetime;
 int savedtime;
-int explodetime = 60000;
+int savedDurationTime;
+int explodetime;
 int explodeProp = 0;
 int skipPoints = 1;
 
+float magnitude;
+float multiplier; 
+float angle;
+
 boolean active = false;
-// manages weighting of different drawing modes
-int [] randomChoice = {0, 0, 0, 0, 0, 0, 0, 1, 2, 1};
+boolean noFillColor = false;
+boolean noStrokeColor = false;
+boolean bOverride = false;
+
+int [] randomChoice = {0, 0, 0, 0, 1, 2, 3, 1, 2, 3};
 
 int sketchRate;
 
 // declare OSC message received variables
-int magVal;
-int durVal;
 int gestureVal = 1;
 float scaleVal;
 float phaseVal;
-int speedVal;
-int angleVal;
+int speedVal = 5;
 
 // declare OSC message sent variables
+FloatList mouseCoordPair;
 float backgroundLayer;
 FloatList bkgdRGBLiveArray;
 FloatList bkgdHSBLiveArray;
 FloatList bkgdHSBStaticArray;
 int bkgdOverride = 255;
-FloatList fillVal;
-FloatList strokeVal;
 FloatList trigRot;
 FloatList triRot;
 FloatList angRot;
 int lineQualVal;
-int explodedVal;
 float sinRot;
 float cosRot;
 float tanRot;
@@ -84,7 +88,7 @@ WB_Render3D render;
 
 // setup sketch environment
 void setup() {
-  size(displayWidth, displayHeight, OPENGL);
+  size(800, 600, OPENGL);
   strokeWeight(1);
   strokeCap(ROUND);
   strokeJoin(ROUND);
@@ -94,16 +98,13 @@ void setup() {
   oscP5 = new OscP5(this, 5001);
 
   // set remote location 
-  myRemoteLocation = new NetAddress("127.0.0.1", 5001);
+  myRemoteLocation = new NetAddress("127.0.0.1", 2323);
   
   // plug message communication between OSC messages and sketch
   oscP5.plug(this, "gesture", "/gesture");
   oscP5.plug(this, "scaler", "/scaler");
   oscP5.plug(this, "phase", "/phase");
   oscP5.plug(this, "speed", "/speed");
-  oscP5.plug(this, "angle", "/angle");
-  oscP5.plug(this, "magnitude", "/magnitude");
-  oscP5.plug(this, "duration", "/durVal");
 
   // initialize lists for gesture input
   xMouse = new IntList();
@@ -113,8 +114,6 @@ void setup() {
   bkgdRGBLiveArray = new FloatList();
   bkgdHSBLiveArray = new FloatList();
   bkgdHSBStaticArray = new FloatList();
-  fillVal = new FloatList();
-  strokeVal = new FloatList();
   trigRot = new FloatList();
   triRot = new FloatList();
   angRot = new FloatList();
@@ -124,12 +123,13 @@ void setup() {
 
   //start timer
   savedtime = millis();
+  savedDurationTime = millis();
 
   // initilize HE_Mesh renderer
   render = new WB_Render3D(this);
 }
 
-// set preview to full screen
+// enable full screen presentation mode
 boolean sketchFullScreen()
 {
   return true;
@@ -138,17 +138,16 @@ boolean sketchFullScreen()
 void oscEvent(OscMessage theOscMessage) {
 
   // verifies received messages in the console
-  println("OSC Message received: ");
-  println(theOscMessage.addrPattern() + " ");
+  // println("OSC Message received: ");
+  // println(theOscMessage.addrPattern() + " " + theOscMessage);
 
   // check OSC message patterns and assign them to variables
   if(theOscMessage.checkAddrPattern("/gesture") == true) gestureVal = theOscMessage.get(0).intValue(); 
-  else if(theOscMessage.checkAddrPattern("/scaler") == true) scaleVal = theOscMessage.get(0).intValue()/100f;
+  else if(theOscMessage.checkAddrPattern("/scaler") == true) scaleVal = abs(theOscMessage.get(0).intValue()/100f);
   else if(theOscMessage.checkAddrPattern("/phase") == true) phaseVal = radians(theOscMessage.get(0).intValue());
-  else if(theOscMessage.checkAddrPattern("/speed") == true) speedVal = theOscMessage.get(0).intValue();
-  else if(theOscMessage.checkAddrPattern("/angle") == true) angleVal = theOscMessage.get(0).intValue();   
-  else if(theOscMessage.checkAddrPattern("/magnitude") == true) magVal = theOscMessage.get(0).intValue();
-  else if(theOscMessage.checkAddrPattern("/duration") == true) durVal = theOscMessage.get(0).intValue() * 1000;
+  else if(theOscMessage.checkAddrPattern("/speed") == true) speedVal = abs(theOscMessage.get(0).intValue());
+
+  //println(scaleVal + ", " + phaseVal + ", " + speedVal);
 }
 
 void create() {
@@ -160,15 +159,28 @@ void create() {
     // initialize list for gesture data
     meshPoints = new ArrayList <WB_Point>();
 
-    // to vary shapes of the mesh
-    // skip collected data to form the mesh
-    // magnify the effect to make visible in the mesh
-    int multiplier = skipPoints * magVal;
-
     int zPos = (int)random(height);
     float[] point = new float[3];
 
     for (int i = 0; i < xMouse.size(); i ++) {
+
+      magnitude = (int)(sqrt(pow(xMouse.get(i), 2) + pow(yMouse.get(i), 2))/100.0);
+      duration = (millis() - savedDurationTime)/1000;
+      angle = atan2(yMouse.get(i), xMouse.get(i));
+
+      // println(magnitude + ", " + duration + ", " + angle);
+
+      // to vary shapes of the mesh
+      // skip collected data to form the mesh
+      // magnify the effect to make visible in the mesh
+      multiplier = skipPoints * magnitude;
+
+      //send x, y values to gesture follower
+      OscMessage newMessage = new OscMessage("/tablet/1");
+      newMessage.add(map(xMouse.get(i), 0, width, 0.0, 1.0));
+      newMessage.add(map(yMouse.get(i), 0, height, 0.0, 1.0));
+      oscP5.send(newMessage, myRemoteLocation);
+
       // if multiplier is too large, there will be no drawing before
       // i gets to the value, so this ignores the condition until then
       if(i < multiplier) {
@@ -194,46 +206,53 @@ void create() {
     // send data to HE_Mesh triangulation method
     triangulation = WB_Delaunay.getTriangulation3D(meshPoints, 0.001);
   }
-    // clear mesh data for new gesture
-    else if(!mousePressed) {
-    xMouse.clear();
-    yMouse.clear();
-    meshData = new PVector[xMouse.size()];
-  }
+}
+
+// clear mesh data for new gesture
+void mouseReleased() {
+  xMouse.clear();
+  yMouse.clear();
+  meshData = new PVector[xMouse.size()];
+  savedDurationTime = millis();
 }
 
 void draw() {
-  // hides cursor from view
+  // disable the cursor in drawing mode
   noCursor();
   // vary framerate
-  sketchRate = (int)random(5, speedVal);
+  //sketchRate = (int)random(5, speedVal);
+  sketchRate = (int)map(speedVal, 0, 100, 5, 60);
   frameRate(sketchRate);
   // OscMessage newMessage = new OscMessage("/framerate");
   // newMessage.add(sketchrate);
+  // oscP5.send(newMessage, myRemoteLocation);
 
   // break up color with monochrome frames and enables background variation when no gesture is registered
   backgroundLayer = map(mouseX, 0, width, 0, 360);
   background(backgroundLayer);
   // OscMessage newMessage = new OscMessage("/backroundLayer");
   // newMessage.add(backgroundLayer);
+  // oscP5.send(newMessage, myRemoteLocation);
 
   // change background color during gesture input every frame
   for(int i = 0; i < xMouse.size(); i ++) {
     // colorMode(RGB);
     // background(meshData[i].x % 255, meshData[i].y % 255, meshData[i].z % 255);
     // OscMessage newMessage = new OscMessage("/bkgdRBGLiveArray");
-    // bkgdRBGLiveArray.set(0, meshData[i].x % 255);
-    // bkgdRBGLiveArray.set(1, meshData[i].y % 255);
-    // bkgdRBGLiveArray.set(2, meshData[i].z % 255);
-    // newMessage.add(bkgdRBGLiveArray);
-
-    colorMode(HSB);
-    background(meshData[i].x % 360, meshData[i].y % 100, meshData[i].z % 100);
+    // newMessage.add(meshData[i].x % 255);
+    // newMessage.add(meshData[i].y % 255);
+    // newMessage.add(meshData[i].z % 255);
+    // oscP5.send(newMessage, myRemoteLocation);
+    // if(bOverride) background(bkgdOverride);
+    // else {
+      colorMode(HSB);
+      background(meshData[i].x % 360, meshData[i].y % 100, meshData[i].z % 100);
+    // }
     // OscMessage newMessage = new OscMessage("/bkgdHSBLiveArray");
-    // bkgdHSBLiveArray.set(0, meshData[i].x % 360);
-    // bkgdHSBLiveArray.set(1, meshData[i].y % 100);
-    // bkgdHSBLiveArray.set(2, meshData[i].z % 100);
-    // newMessage.add(bkgdHSBLiveArray);
+    // newMessage.add(meshData[i].x % 360);
+    // newMessage.add(meshData[i].y % 360);
+    // newMessage.add(meshData[i].z % 360);
+    // oscP5.send(newMessage, myRemoteLocation);
   }
   //reset Present colorMode just incase RGB is enabled above
   colorMode(HSB, 360, 100, 100, 360);
@@ -245,13 +264,14 @@ void draw() {
   hint(ENABLE_DEPTH_TEST);
 
   // call to function that creates mesh
-  create();
+  if(mousePressed) create();
 
   // enable different drawing scenes depending on gesture message
   switch(gestureVal) {
     case(1):
    // OscMessage newMessage = new OscMessage("/Copies");
    // newMessage.add(gestureVal);
+   // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 1;
       pushMatrix();
         display();
@@ -260,6 +280,7 @@ void draw() {
     case(2):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
+      // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 2;
       pushMatrix();
         // draw 3D
@@ -277,6 +298,7 @@ void draw() {
     case(3):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
+      // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 3;
       pushMatrix();
         hint(DISABLE_DEPTH_TEST); 
@@ -297,6 +319,7 @@ void draw() {
     case(4):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
+      // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 4;
       pushMatrix(); 
         hint(ENABLE_DEPTH_TEST); 
@@ -322,6 +345,7 @@ void draw() {
     case(5):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
+      // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 5;
       pushMatrix(); 
         hint(DISABLE_DEPTH_TEST); 
@@ -358,34 +382,35 @@ void display() {
   lifetime = millis() - savedtime;
   // OscMessage newMessage = new OscMessage("/Time");
   // newMessage.add(lifetime);
+  // oscP5.send(newMessage, myRemoteLocation);
 
   // different variations to rotate the mesh in relation to the height location of the mouse
-  sinRot = constrain(sin(angleVal) * map(mouseY, 0, height, 0, height) * scaleVal/width * phaseVal, 0, TWO_PI);
-  cosRot = constrain(cos(angleVal) * map(mouseY, 0, height, 0, height) * scaleVal/width * phaseVal, 0, TWO_PI);
-  tanRot = constrain(tan(angleVal) * map(mouseY, 0, height, 0, height) * scaleVal/width * phaseVal, 0, TWO_PI);
+  sinRot = constrain(sin(angle) * scaleVal/width * phaseVal/10f, 0, TWO_PI);
+  cosRot = constrain(cos(angle) * scaleVal/width * phaseVal/10f, 0, TWO_PI);
+  tanRot = constrain(tan(angle) * scaleVal/width * phaseVal/10f, 0, TWO_PI);
 
   rotateY(sinRot);
   rotateX(cosRot);
   rotateZ(tanRot);
   // OscMessage newMessage = new OscMessage("/triRot");
-  // trigRot.set(0, sinRot);
-  // trigRot.set(1, cosRot);
-  // trigRot.set(2, tanRot);
-  // newMessage.add(trigRot);
+  // newMessage.add(sinRot);
+  // newMessage.add(cosRot);
+  // newMessage.add(tanRot);
+  // oscP5.send(newMessage, myRemoteLocation);
 
   // different variations to rotate the mesh in relation to the frameCount
-  angRotY = constrain(frameCount * (angleVal/1000f)/width * TWO_PI, 0, TWO_PI);
-  angRotX = constrain(frameCount * (angleVal/1000f)/width * TWO_PI, 0, TWO_PI);
-  angRotZ = constrain(frameCount * (angleVal/1000f)/width * TWO_PI, 0, TWO_PI);
+  angRotY = constrain(frameCount * angle/width * TWO_PI, 0, TWO_PI);
+  angRotX = constrain(frameCount * angle/width * TWO_PI, 0, TWO_PI);
+  angRotZ = constrain(frameCount * angle/width * TWO_PI, 0, TWO_PI);
 
   rotateY(angRotY);
   rotateX(angRotX);
   rotateZ(angRotZ);
   // OscMessage newMessage = new OscMessage("/angRot");
-  // angRot.set(0, angRotY);
-  // angRot.set(1, angRotX);
-  // angRot.set(2, angRotZ);
-  // newMessage.add(angRot);
+  // newMessage.add(angRotY);
+  // newMessage.add(angRotX);
+  // newMessage.add(angRotZ);
+  // oscP5.send(newMessage, myRemoteLocation);
 
   // start to draw mesh if it's has been populates with points
   if(triangulation != null) {
@@ -398,43 +423,53 @@ void display() {
         strokeWeight(lineQualVal);
         // OscMessage newMessage = new OscMessage("/lineQuality");
         // newMessage.add(lineQuality);
+        // oscP5.send(newMessage, myRemoteLocation);
 
-        //if enabled, hinders drawing in interesting way, breaks of monotony of seeing so many meshes
-        // if(gestureVal == 1) background(bkgdOverride);
+        // enables an additional drawing mode, breaks of monotony of seeing so many meshes
+        if(bOverride) background(bkgdOverride);
         // OscMessage newMessage = new OscMessage("/bkgdOverride);
         // newMessage.add(bkgdOverride);
+        // oscP5.send(newMessage, myRemoteLocation);
 
-        //noFill();
-        // OscMessage newMessage = new OscMessage("/fillcolor");
-        // fillVal.set(0, 0);
-        // fillVal.set(1, 0);
-        // fillVal.set(2, 0);
-        // fillVal.set(3, 0);
-        // newMessage.add(fillVal);
-        fillColor = color(360 % (triangulation.Tri[i][j] + 1), 100 % (triangulation.Vertices.length + 1), 100 % (triangulation.Edges.length + 1), 360 % (triangulation.Walk.length + 1));
+        if(noFillColor) {
+          fillColor = color(360 % (triangulation.Tri[i][j] + 1), 100 % (triangulation.Vertices.length + 1), 100 % (triangulation.Edges.length + 1), 360 % (triangulation.Walk.length + 1));
+          // OscMessage newMessage = new OscMessage("/fillcolor");
+          // newMessage.add(360 % (triangulation.Tri[i][j] + 1));
+          // newMessage.add(100 % (triangulation.Vertices[i][j] + 1));
+          // newMessage.add(100 % (triangulation.Edges[i][j] + 1));
+          // newMessage.add(360 % (triangulation.Walk[i][j] + 1));
+          // oscP5.send(newMessage, myRemoteLocation);
+        } else {
+            fillColor = color(360 % (triangulation.Tri[i][j] + 1), 100 % (triangulation.Vertices.length + 1), 0, 360 % (triangulation.Walk.length + 1));
+            // OscMessage newMessage = new OscMessage("/fillcolor");
+            // newMessage.add(0);
+            // newMessage.add(0);
+            // newMessage.add(0);
+            // newMessage.add(0);
+            // oscP5.send(newMessage, myRemoteLocation);
+          }
+
         fill(fillColor);
-        // OscMessage newMessage = new OscMessage("/fillcolor");
-        // fillVal.set(0, 360 % (triangulation.Tri[i][j] + 1));
-        // fillVal.set(1, 100 % (triangulation.Vertices[i][j] + 1));
-        // fillVal.set(2, 100 % (triangulation.Edges[i][j] + 1));
-        // fillVal.set(3, 360 % (triangulation.Walk[i][j] + 1));
-        // newMessage.add(fillVal);
 
-        //noStroke();
-        // OscMessage newMessage = new OscMessage("/strokecolor");
-        // strokeVal.set(0, 0);
-        // strokeVal.set(1, 0);
-        // strokeVal.set(2, 0);
-        // strokeVal.set(3, 0);
-        // newMessage.add(strokeVal);
-        strokeColor = color(360 % (triangulation.Tri[i][j] + 1) + 180, 100 % (triangulation.Vertices.length + 1), 100 % (triangulation.Edges.length + 1), 360 % (triangulation.Walk.length + 1));
+
+        if(noStrokeColor) {
+          strokeColor = color(360 % (triangulation.Tri[i][j] + 1) + 180, 100 % (triangulation.Vertices.length + 1), 100 % (triangulation.Edges.length + 1), 360 % (triangulation.Walk.length + 1));
+          // OscMessage newMessage = new OscMessage("/strokecolor");
+          // newMessage.add(360 % (triangulation.Tri[i][j] + 1) + 180);
+          // newMessage.add(100 % (triangulation.Vertices[i][j] + 1));
+          // newMessage.add(100 % (triangulation.Edges[i][j] + 1));
+          // newMessage.add(360 % (triangulation.Walk[i][j] + 1));
+          // oscP5.send(newMessage, myRemoteLocation);
+        } else {
+            strokeColor = color(360 % (triangulation.Tri[i][j] + 1) + 180, 100 % (triangulation.Vertices.length + 1), 0, 360 % (triangulation.Walk.length + 1));
+            // OscMessage newMessage = new OscMessage("/strokecolor");
+            // newMessage.add(0);
+            // newMessage.add(0);
+            // newMessage.add(0);
+            // newMessage.add(0);
+            // oscP5.send(newMessage, myRemoteLocation);
+          }
         stroke(strokeColor);
-        // OscMessage newMessage = new OscMessage("/strokecolor");
-        // strokeVal.set(0, 360 % (triangulation.Tri[i][j] + 1) + 180);
-        // strokeVal.set(1, 100 % (triangulation.Vertices[i][j] + 1));
-        // strokeVal.set(2, 100 % (triangulation.Edges[i][j] + 1));
-        // strokeVal.set(3, 360 % (triangulation.Walk[i][j] + 1));
-        // newMessage.add(strokeVal);
 
         // timer to select different exploded mesh drawing modes
         if(lifetime > explodetime && !active) {
@@ -462,10 +497,10 @@ void display() {
           rotateX(triRotX);
           rotateZ(triRotZ);
           // OscMessage newMessage = new OscMessage("/explodedModel");
-          // triRot.set(0, triRotY);
-          // triRot.set(1, triRotX);
-          // triRot.set(2, triRotZ);
-          // newMessage.add(triRot);
+          // newMessage.add(triRotY);
+          // newMessage.add(triRotX);
+          // newMessage.add(triRotZ);
+          // oscP5.send(newMessage, myRemoteLocation);
           break;
           case(2):
           // drawing mode based on length of vertices associated with each triangle
@@ -477,26 +512,26 @@ void display() {
           rotateX(triRotX);
           rotateZ(triRotZ);
           // OscMessage newMessage = new OscMessage("/explodedModel");
-          // triRot.set(0, triRotY);
-          // triRot.set(1, triRotX);
-          // triRot.set(2, triRotZ);
-          // newMessage.add(triRot);
+          // newMessage.add(triRotY);
+          // newMessage.add(triRotX);
+          // newMessage.add(triRotZ);
+          // oscP5.send(newMessage, myRemoteLocation);
           break;
           case(3):
           // drawing mode based on duration of gestures
-          translate(width/2, 0, 0);
-          triRotY = constrain(durVal * random(scaleVal)/width * TWO_PI, 0, TWO_PI);
-          triRotX = constrain(durVal * random(scaleVal)/height * TWO_PI, 0, TWO_PI);
-          triRotZ = constrain(durVal * random(scaleVal)/sqrt(pow(width, 2) + pow(height, 2)) * TWO_PI, 0, TWO_PI);
+          //translate(width/2, 0, 0);
+          triRotY = constrain(duration * random(scaleVal)/width * TWO_PI, 0, TWO_PI);
+          triRotX = constrain(duration * random(scaleVal)/height * TWO_PI, 0, TWO_PI);
+          triRotZ = constrain(duration * random(scaleVal)/sqrt(pow(width, 2) + pow(height, 2)) * TWO_PI, 0, TWO_PI);
 
           rotateY(triRotY);
           rotateX(triRotX);
           rotateZ(triRotZ);
           // OscMessage newMessage = new OscMessage("/explodedModel");
-          // triRot.set(0, triRotY);
-          // triRot.set(1, triRotX);
-          // triRot.set(2, triRotZ);
-          // newMessage.add(triRot);
+          // newMessage.add(triRotY);
+          // newMessage.add(triRotX);
+          // newMessage.add(triRotZ);
+          // oscP5.send(newMessage, myRemoteLocation);
           break;
         }
       } 
@@ -504,6 +539,15 @@ void display() {
       render.drawTetrahedron(triangulation.Tri[i], meshPoints);
     }
   }
+}
+
+void keyPressed() {
+  if(key == 'a') noFillColor = true;
+  else if(key == 'b') noFillColor = false;
+  if(key == 'c') noStrokeColor = true;
+  else if (key == 'd') noStrokeColor = false;
+  if(key == 'e') bOverride = true;
+  else if(key =='f') bOverride = false;
 }
 
 
