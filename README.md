@@ -11,7 +11,7 @@ NOTE: The current MAX/MSP patch uses sound samples to simulate the sound generat
 
 A. Download the MAX/MSP dependencies as listed in the following section, extract them and put them in the PACKAGES folder where MAX/MSP is installed on your computer.
 
-B. Store 5 sound files named 1.wav, 2.wav, … 5.wav in GSavi > snd. 
+B. (OPTIONAL, 5 example sounds are provided in GSavi > snd) Store 5 sound files named 1.wav, 2.wav, … 5.wav in GSavi > snd. 
 
 C. Open the file GSavi.maxpat. 
 
