@@ -49,17 +49,18 @@ Press ‘f’ to disable the different mode
 Install the following libraries into Max/Packages:
 (For previous versions of MAX/MSP, install the relevant version of the library)
 
-MuBu Library of external objects for Max 7:
-http://forumnet.ircam.fr/product/mubu/
+MuBu Library of external objects for Max 7: http://forumnet.ircam.fr/product/mubu/
 
-FTM Library of external objects for Max 7:
-http://ftm.ircam.fr/index.php/Download
+FTM Library of external objects for Max 7: http://ftm.ircam.fr/index.php/Download
 
-CNMAT OSC externals for Max 7:
-https://github.com/CNMAT/CNMAT-MMJ-Depot 
+CNMAT OSC externals for Max 7 - download the latest version from:
+http://cnmat.berkeley.edu/downloads/externals/archives
+Create a folder “CNMAT" inside Max/Packages, and a folder “externals” inside it
+Move the file “OSC-route.mxo” (inside CNMAT_Externals) to Max/Packages/CNMAT/externals
 
-Gesture follower external for Max 7: (the folder needed is “example-maxmsp”)
-https://github.com/bcaramiaux/ofxGVF
+Gesture follower external for Max 7: https://github.com/bcaramiaux/ofxGVF
+Create a folder “GVF" inside Max/Packages, and a folder “externals” inside it
+Move the file “gvf.mxo” (inside ofxGVF/example-maxmsp/maxexternal) to Max/Packages/GVF/externals
 
 
 # Processing Dependencies
