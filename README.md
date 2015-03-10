@@ -56,9 +56,9 @@ FTM Library of external objects for Max 7:
 http://ftm.ircam.fr/index.php/Download
 
 CNMAT OSC externals for Max 7:
-https://github.com/CNMAT/CNMAT-Externs/releases
+https://github.com/CNMAT/CNMAT-MMJ-Depot 
 
-Gesture follower external for Max 7:
+Gesture follower external for Max 7: (the folder needed is “example-maxmsp”)
 https://github.com/bcaramiaux/ofxGVF
 
 
