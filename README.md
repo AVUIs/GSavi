@@ -1,5 +1,5 @@
 # GS.avi
-beta2 code
+beta3 code
 
 GS.avi is a gestural instrument that generates continuous spatial visualizations and music from the input of a performer. The features extracted form a performer’s gesture defines the color, position, form and orientation of a 3-dimensional Delaunay mesh. The music, composed using granular synthesis, is generated from features extracted from the mesh. The project was created using Processing and MAX/MSP. OSC is used to communicate between the two.
 
@@ -44,7 +44,15 @@ Press ‘d’ to enable noStroke()
 D. To override the background drawn treatment to enable a different drawing mode (not yet controlled by sound):
 Press ‘e’ to enable the different mode
 Press ‘f’ to disable the different mode
-# MAX/MSP Dependencies
+
+E. Visual cues to signify the gesture predicted by the system has been added.
+Gesture 1: Predicts a circle drawn counter-clockwise.
+Gesture 2: Predicts a triangle drawn clockwise.
+Gesture 3: Predicts a square drawn counter-clockwise. (This visual cue is currently discabled.)
+Gesture 4: Predicts a line drawn from the upper right to the lower left.
+Gesture 5: Predicts a line drawn from the upper left to the lower right.
+
+# MAX/MSP Dependencies
 
 Install the following libraries into Max/Packages:
 (For previous versions of MAX/MSP, install the relevant version of the library)

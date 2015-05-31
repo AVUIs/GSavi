@@ -1,6 +1,6 @@
 /**
  * An audio-visual tool to generate music and visuals from gesture input.
- * Part of Nuno Correla's audio visual user interface research at Goldsmiths.
+ * Part of Nuno Correla's audio visual user interface research at Goldsmiths, UK.
  * 
  * Project by Will Brown, Missnommer and Miguel Ortiz
  * based on the Ref_WB_Delaunay3D example from the HE_Mesh library.
@@ -21,6 +21,17 @@ import netP5.*;
 // declare OSC objects
 OscP5 oscP5;
 NetAddress myRemoteLocation;
+
+//declare PShape objects
+PShape triCirc;
+PShape triTri;
+PShape triSqu;
+PShape triLinePSlope;
+PShape triLineNSlope;
+
+float cricRot;
+float squTime = 0.0;
+boolean limit = false;
 
 // declare sketch variables and objects
 IntList xMouse;
@@ -88,11 +99,17 @@ WB_Render3D render;
 
 // setup sketch environment
 void setup() {
-  size(800, 600, OPENGL);
+  size(displayWidth, displayHeight, OPENGL);
   strokeWeight(1);
   strokeCap(ROUND);
   strokeJoin(ROUND);
   smooth(8);
+
+  triCirc = createShape(TRIANGLE, 0, 0, -width, -height, width, -height);
+  triTri = createShape(TRIANGLE, 0, 0, width/30, height/2, 0, height);
+  triSqu = createShape(TRIANGLE, 0, 0, 0, width/2, width/2, width/2);
+  triLinePSlope = createShape(TRIANGLE, 0, 0, 0, width/4, width/4, width/4);
+  triLineNSlope = createShape(TRIANGLE, 0, 0, 0, width/4, width/4, width/4);
 
   // initialize OSC and assign port for incoming messages
   oscP5 = new OscP5(this, 5001);
@@ -129,7 +146,7 @@ void setup() {
   render = new WB_Render3D(this);
 }
 
-// enable full screen presentation mode
+//enable full screen presentation mode
 boolean sketchFullScreen()
 {
   return true;
@@ -151,6 +168,7 @@ void oscEvent(OscMessage theOscMessage) {
 }
 
 void create() {
+
   // start collecting mesh data when the mouse is dragged
   if(mousePressed) {
     xMouse.append(mouseX);
@@ -216,9 +234,28 @@ void mouseReleased() {
   savedDurationTime = millis();
 }
 
+void setTri() {
+  
+  if(gestureVal == 1) {
+    for(int i = 0; i < meshData.length; i ++) {
+      triCirc = createShape(TRIANGLE, 0, 0, meshData[i].x, meshData[i].y, meshData[i].y, meshData[i].z);
+    }
+  }
+  
+  //int sideTri = (int)random(0, height/2);
+  //triTri = createShape(TRIANGLE, 0, height/2 - side, width/30, height/2, 0, height/2 + side);
+  
+  // sign = randomSign[(int)random(0, 2)]; //println(sign);
+  // sideSqu = (int)random(1, 20);
+  // if(sideSqu % 2 == 0) {
+  //   triSqu = createShape(TRIANGLE, 0, 0, 0, width/sideSqu, width/sideSqu, width/sideSqu);
+  //   x = 0.0;
+  // }
+}
+
 void draw() {
   // disable the cursor in drawing mode
-  noCursor();
+  //noCursor();
   // vary framerate
   //sketchRate = (int)random(5, speedVal);
   sketchRate = (int)map(speedVal, 0, 100, 5, 60);
@@ -261,7 +298,7 @@ void draw() {
   directionalLight(255, 255, 255, 1, 1, -1);
   directionalLight(127, 127, 127, -1, -1, 1);
 
-  hint(ENABLE_DEPTH_TEST);
+  //hint(ENABLE_DEPTH_TEST);
 
   // call to function that creates mesh
   if(mousePressed) create();
@@ -276,23 +313,49 @@ void draw() {
       pushMatrix();
         display();
       popMatrix();
-      break;
+
+      for(int i = 0; i < meshData.length; i ++) {
+        triCirc = createShape(TRIANGLE, 0, 0, meshData[i].x, meshData[i].y, meshData[i].y, meshData[i].z);
+      }
+
+      translate(width/2, height/2);
+      pushMatrix();
+      for(int i = 0; i < meshData.length; i ++) {
+        triCirc.setFill(color(map(i, 1, meshPoints.size(), 0, 360), meshData.length % 100, 100, meshPoints.size() % 360));
+        rotate(TWO_PI/(meshData.length + 1));
+        triCirc.rotate(cricRot * i);
+        shape(triCirc);
+      }
+      cricRot += activetime * .001;
+      popMatrix();
+    break;
     case(2):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
       // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 2;
       pushMatrix();
-        // draw 3D
-        hint(ENABLE_DEPTH_TEST); 
-        translate(-width/4, 0);
+      //   // draw 3D
+      //   hint(ENABLE_DEPTH_TEST); 
+      //   translate(-width/4, 0);
         display();
       popMatrix();
+
       pushMatrix();
-        // draw 2D
-        hint(DISABLE_DEPTH_TEST); 
-        translate(width/4, 0);
-        display();
+      if(triangulation != null) {
+        for(int i = 0; i < triangulation.Tri.length; i ++) {
+            triTri = createShape(TRIANGLE, 0, (height/2 - i * magnitude), width/(i + 1), height/2, 0, (height/2 + i * magnitude));
+        } 
+      }
+      popMatrix();
+
+      pushMatrix();
+      for(int i = 0; i < 30; i ++) {
+         triTri.setFill(color(map(i, 1, 30, 0, 360), 100, 100, random(10, 100)));
+         shape(triTri, width/30 * i, 0);
+         triTri.rotateY(PI);
+         triTri.translate(width/30, 0);
+      }
       popMatrix();
       break;
     case(3):
@@ -301,78 +364,102 @@ void draw() {
       // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 3;
       pushMatrix();
-        hint(DISABLE_DEPTH_TEST); 
-        translate(-width/4, 0);
-        display();
+      //   hint(DISABLE_DEPTH_TEST); 
+      //   translate(-width/4, 0);
+         display();
       popMatrix();
-      pushMatrix();
-        hint(ENABLE_DEPTH_TEST); 
-        translate(0, 0);
-        display();
-      popMatrix();
-      pushMatrix();
-        hint(DISABLE_DEPTH_TEST); 
-        translate(width/4, 0);
-        display();
-      popMatrix();
-      break;
+
+      // pushMatrix();
+      // if(triangulation != null) {
+      //   for(int i = 0; i < meshData.length; i ++) {
+      //         triSqu = createShape(TRIANGLE, 0, 0, 0, width/((i + 1) * magnitude), width/((i + 1) * magnitude), width/((i + 1) * magnitude));
+
+      //         translate(width/2 + width/(((i + 1) * magnitude) * 2), height/2 - width/(((i + 1) * magnitude) * 2));
+      //         pushMatrix();
+      //         for(int k = 0; k < 4; k ++) {
+      //           triSqu.setStrokeWeight(0);
+      //           triSqu.setFill(color(map(k, 1, 4, 0, 360), 100, 100, random(10, 360)));
+      //           triSqu.rotate(PI/2);
+      //           shape(triSqu);
+      //           triSqu.translate(squTime, 0);
+      //         }
+
+      //         if(limit == true) {
+      //           squTime -= .5;
+      //         }
+      //         else if(limit == false) {
+      //           squTime += .5;
+      //         }
+              
+      //         if (squTime >= width/(((i + 1) * magnitude)/2)) {
+      //            limit = true;
+      //         } else if (squTime < 0) limit = false;
+      //         popMatrix();
+      //   } 
+      // }
+      // popMatrix();
+
+    break;
     case(4):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
       // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 4;
-      pushMatrix(); 
-        hint(ENABLE_DEPTH_TEST); 
-        translate(-width/4, height/4);
-        display();
-      popMatrix();
-      pushMatrix(); 
-        hint(DISABLE_DEPTH_TEST); 
-        translate(-width/4, -height/4);
-        display();
-      popMatrix();
-      pushMatrix(); 
-        hint(DISABLE_DEPTH_TEST); 
-        translate(width/4, height/4);
-        display();
-      popMatrix();
-      pushMatrix(); 
-        hint(ENABLE_DEPTH_TEST); 
-        translate(width/4, -height/4);
-        display();
-      popMatrix();
-      break;
+       pushMatrix(); 
+         hint(ENABLE_DEPTH_TEST); 
+         display();
+       popMatrix();
+
+        pushMatrix();
+        translate(0, random(0, height));
+        rotate(-PI/2);
+        for(int i = 0; i < 32; i ++) {
+          triLinePSlope.setStrokeWeight(0);
+          triLinePSlope.setFill(color(map(i, 1, 32, 0, 180), 100, 100, random(10, 100)));
+            shape(triLinePSlope, width/32 * i, width/32 * i); 
+        }
+        popMatrix();
+
+        pushMatrix();
+        translate(random(0, width), 0);
+        rotate(-PI/2);
+        for(int i = 0; i < 32; i ++) {
+          triLinePSlope.setStrokeWeight(0);
+          triLinePSlope.setFill(color(map(i, 1, 32, 180, 0), 100, 100, random(10, 100)));
+            shape(triLinePSlope, width/32 * -i, width/32 * -i); 
+        }
+        popMatrix();
+    break;
     case(5):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
       // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 5;
       pushMatrix(); 
-        hint(DISABLE_DEPTH_TEST); 
-        translate(0, 0);
-        display();
+         hint(ENABLE_DEPTH_TEST); 
+         display();
       popMatrix();
-      pushMatrix(); 
-        hint(ENABLE_DEPTH_TEST); 
-        translate(-width/4, height/4);
-        display();
+
+      pushMatrix();
+      translate(random(0, width), random(0, height));
+      rotate(PI);
+      for(int i = 0; i < 32; i ++) {
+        triLineNSlope.setStrokeWeight(0);
+        triLineNSlope.setFill(color(map(i, 1, 32, 180, 360), 100, 100, random(10, 100)));
+        shape(triLineNSlope, width/32 * i, width/32 * i); 
+      }
       popMatrix();
-      pushMatrix(); 
-        hint(ENABLE_DEPTH_TEST); 
-        translate(-width/4, -height/4);
-        display();
-      popMatrix();
-      pushMatrix(); 
-        hint(ENABLE_DEPTH_TEST); 
-        translate(width/4, height/4);
-        display();
-      popMatrix();
-      pushMatrix(); 
-        hint(ENABLE_DEPTH_TEST); 
-        translate(width/4, -height/4);
-        display();
-      popMatrix();
-      break;
+
+      pushMatrix();
+      translate(random(0, width), random(0, height));
+      rotate(PI);
+      for(int i = 0; i < 32; i ++) {
+        triLineNSlope.setStrokeWeight(0);
+        triLineNSlope.setFill(color(map(i, 1, 32, 360, 180), 100, 100, random(10, 100)));
+        shape(triLineNSlope, width/32 * -i, width/32 * -i); 
+      }
+    popMatrix();
+    break;
   }
 }
 
