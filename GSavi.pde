@@ -32,6 +32,7 @@ PShape triLineNSlope;
 float cricRot;
 float squTime = 0.0;
 boolean limit = false;
+int division;
 
 // declare sketch variables and objects
 IntList xMouse;
@@ -234,25 +235,6 @@ void mouseReleased() {
   savedDurationTime = millis();
 }
 
-void setTri() {
-  
-  if(gestureVal == 1) {
-    for(int i = 0; i < meshData.length; i ++) {
-      triCirc = createShape(TRIANGLE, 0, 0, meshData[i].x, meshData[i].y, meshData[i].y, meshData[i].z);
-    }
-  }
-  
-  //int sideTri = (int)random(0, height/2);
-  //triTri = createShape(TRIANGLE, 0, height/2 - side, width/30, height/2, 0, height/2 + side);
-  
-  // sign = randomSign[(int)random(0, 2)]; //println(sign);
-  // sideSqu = (int)random(1, 20);
-  // if(sideSqu % 2 == 0) {
-  //   triSqu = createShape(TRIANGLE, 0, 0, 0, width/sideSqu, width/sideSqu, width/sideSqu);
-  //   x = 0.0;
-  // }
-}
-
 void draw() {
   // disable the cursor in drawing mode
   //noCursor();
@@ -311,22 +293,24 @@ void draw() {
    // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 1;
       pushMatrix();
+        hint(ENABLE_DEPTH_TEST);
         display();
       popMatrix();
 
       for(int i = 0; i < meshData.length; i ++) {
-        triCirc = createShape(TRIANGLE, 0, 0, meshData[i].x, meshData[i].y, meshData[i].y, meshData[i].z);
+        triCirc = createShape(TRIANGLE, 0, 0, width/(meshData[i].x + 1), width/(meshData[i].y + 1), width/(meshData[i].y + 1), meshData[i].z);
       }
 
       translate(width/2, height/2);
       pushMatrix();
       for(int i = 0; i < meshData.length; i ++) {
+        noLights();
         triCirc.setFill(color(map(i, 1, meshPoints.size(), 0, 360), meshData.length % 100, 100, meshPoints.size() % 360));
         rotate(TWO_PI/(meshData.length + 1));
         triCirc.rotate(cricRot * i);
         shape(triCirc);
       }
-      cricRot += activetime * .001;
+      cricRot += activetime * .0005;
       popMatrix();
     break;
     case(2):
@@ -336,25 +320,26 @@ void draw() {
       skipPoints = 2;
       pushMatrix();
       //   // draw 3D
-      //   hint(ENABLE_DEPTH_TEST); 
+         hint(ENABLE_DEPTH_TEST); 
       //   translate(-width/4, 0);
         display();
       popMatrix();
 
-      pushMatrix();
       if(triangulation != null) {
         for(int i = 0; i < triangulation.Tri.length; i ++) {
-            triTri = createShape(TRIANGLE, 0, (height/2 - i * magnitude), width/(i + 1), height/2, 0, (height/2 + i * magnitude));
+            triTri = createShape(TRIANGLE, 0, (height/2 - i * random(magnitude)), width/(i + 1), height/2, 0, (height/2 + i * random(magnitude)));
+
+            division = width/(i + 1);
         } 
       }
-      popMatrix();
 
       pushMatrix();
-      for(int i = 0; i < 30; i ++) {
-         triTri.setFill(color(map(i, 1, 30, 0, 360), 100, 100, random(10, 100)));
-         shape(triTri, width/30 * i, 0);
-         triTri.rotateY(PI);
-         triTri.translate(width/30, 0);
+      for(int i = 0; i < division; i ++) {
+        noLights();
+        triTri.setFill(color(map(i, 0, division, 0, 360), 100, 100, random(10, 360)));
+        shape(triTri, width/division * i, 0);
+        triTri.rotateY(PI);
+        triTri.translate(width/division, 0);
       }
       popMatrix();
       break;
@@ -414,8 +399,9 @@ void draw() {
         translate(0, random(0, height));
         rotate(-PI/2);
         for(int i = 0; i < 32; i ++) {
+          noLights();
           triLinePSlope.setStrokeWeight(0);
-          triLinePSlope.setFill(color(map(i, 1, 32, 0, 180), 100, 100, random(10, 100)));
+          triLinePSlope.setFill(color(map(i, 1, 32, 0, 180), 100, 100, random(10, 360)));
             shape(triLinePSlope, width/32 * i, width/32 * i); 
         }
         popMatrix();
@@ -424,9 +410,10 @@ void draw() {
         translate(random(0, width), 0);
         rotate(-PI/2);
         for(int i = 0; i < 32; i ++) {
+          noLights();
           triLinePSlope.setStrokeWeight(0);
-          triLinePSlope.setFill(color(map(i, 1, 32, 180, 0), 100, 100, random(10, 100)));
-            shape(triLinePSlope, width/32 * -i, width/32 * -i); 
+          triLinePSlope.setFill(color(map(i, 1, 32, 180, 0), 100, 100, random(10, 360)));
+          shape(triLinePSlope, width/32 * -i, width/32 * -i); 
         }
         popMatrix();
     break;
@@ -444,8 +431,9 @@ void draw() {
       translate(random(0, width), random(0, height));
       rotate(PI);
       for(int i = 0; i < 32; i ++) {
+        //noLights();
         triLineNSlope.setStrokeWeight(0);
-        triLineNSlope.setFill(color(map(i, 1, 32, 180, 360), 100, 100, random(10, 100)));
+        triLineNSlope.setFill(color(map(i, 1, 32, 180, 360), 100, 100, random(10, 360)));
         shape(triLineNSlope, width/32 * i, width/32 * i); 
       }
       popMatrix();
@@ -454,8 +442,9 @@ void draw() {
       translate(random(0, width), random(0, height));
       rotate(PI);
       for(int i = 0; i < 32; i ++) {
+        //noLights();
         triLineNSlope.setStrokeWeight(0);
-        triLineNSlope.setFill(color(map(i, 1, 32, 360, 180), 100, 100, random(10, 100)));
+        triLineNSlope.setFill(color(map(i, 1, 32, 360, 180), 100, 100, random(10, 360)));
         shape(triLineNSlope, width/32 * -i, width/32 * -i); 
       }
     popMatrix();
