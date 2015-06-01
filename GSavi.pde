@@ -298,14 +298,15 @@ void draw() {
       popMatrix();
 
       for(int i = 0; i < meshData.length; i ++) {
-        triCirc = createShape(TRIANGLE, 0, 0, width/(meshData[i].x + 1), width/(meshData[i].y + 1), width/(meshData[i].y + 1), meshData[i].z);
+        triCirc = createShape(TRIANGLE, 0, 0, width/(meshData[i].x + 1) * magnitude, width/(meshData[i].y + 1) * magnitude, width/(meshData[i].y + 1) * magnitude, width/(meshData[i].z + 1) * magnitude);
       }
 
       translate(width/2, height/2);
       pushMatrix();
       for(int i = 0; i < meshData.length; i ++) {
         noLights();
-        triCirc.setFill(color(map(i, 1, meshPoints.size(), 0, 360), meshData.length % 100, 100, meshPoints.size() % 360));
+        triCirc.setStrokeWeight(0.5);
+        triCirc.setFill(color(map(i, 1, meshData.length, 0, 360), meshData.length % 100, 100, meshPoints.size() % 360));
         rotate(TWO_PI/(meshData.length + 1));
         triCirc.rotate(cricRot * i);
         shape(triCirc);
