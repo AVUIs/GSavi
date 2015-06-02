@@ -360,9 +360,9 @@ void draw() {
       if(triangulation != null) {
         for(int i = 0; i < triangulation.Vertices.length; i ++) {
           for(int j = 0; j < triangulation.Vertices[i].length; j ++) {
-            triSqu = createShape(TRIANGLE, 0, 0, 0, width/((j + 1) * sketchRate * .05), width/((j + 1) * sketchRate * .05), width/((j + 1) * sketchRate * .05));
+            triSqu = createShape(TRIANGLE, 0, 0, 0, width/((j + 1) * sketchRate * .1), width/((j + 1) * sketchRate * .1), width/((j + 1) * sketchRate * .1));
 
-            squDivision = (int)((j + 1) * sketchRate * .05);
+            squDivision = (int)((j + 1) * sketchRate * .1);
 
             triSqu.setStrokeWeight(0);
             triSqu.setFill(color(map(i, 0, triangulation.Vertices.length, 0, 360), 100, 100, map(j, 0, triangulation.Vertices[i].length, 0, 360)));
@@ -373,7 +373,7 @@ void draw() {
               if(squDivision % 2 == 0) {
                 translate(0, height/2);
                 for(int k = 0; k < 3; k ++) {
-                  shape(triSqu, width/squDivision * i, 0);
+                  shape(triSqu, (width/squDivision) * i, 0);
                   triSqu.rotate(PI/2);
                   if(k % 2 != 0) translate(0, width/squDivision);
                   else if(k % 2 == 0) translate(width/squDivision, 0);
