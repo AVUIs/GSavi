@@ -48,7 +48,7 @@ Press ‘f’ to disable the different mode
 E. Visual cues to signify the gesture predicted by the system has been added.
 Gesture 1: Predicts a circle drawn counter-clockwise.
 Gesture 2: Predicts a triangle drawn clockwise.
-Gesture 3: Predicts a square drawn counter-clockwise. (This visual cue is currently discabled.)
+Gesture 3: Predicts a square drawn counter-clockwise. 
 Gesture 4: Predicts a line drawn from the upper right to the lower left.
 Gesture 5: Predicts a line drawn from the upper left to the lower right.
 
