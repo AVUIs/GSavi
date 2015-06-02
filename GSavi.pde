@@ -238,7 +238,7 @@ void mouseReleased() {
 
 void draw() {
   // disable the cursor in drawing mode
-  //noCursor();
+  noCursor();
   // vary framerate
   //sketchRate = (int)random(5, speedVal);
   sketchRate = (int)map(speedVal, 0, 100, 5, 60);
@@ -353,7 +353,7 @@ void draw() {
       // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 3;
       pushMatrix();
-        //hint(ENABLE_DEPTH_TEST); 
+        hint(ENABLE_DEPTH_TEST); 
         display();
       popMatrix();
 
