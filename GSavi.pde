@@ -32,7 +32,8 @@ PShape triLineNSlope;
 float cricRot;
 float squTime = 0.0;
 boolean limit = false;
-int division;
+int division = 0;
+int squDivision = 0;
 
 // declare sketch variables and objects
 IntList xMouse;
@@ -108,7 +109,7 @@ void setup() {
 
   triCirc = createShape(TRIANGLE, 0, 0, -width, -height, width, -height);
   triTri = createShape(TRIANGLE, 0, 0, width/30, height/2, 0, height);
-  triSqu = createShape(TRIANGLE, 0, 0, 0, width/2, width/2, width/2);
+  triSqu = createShape(TRIANGLE, 0, 0, 0, width/16, width/16, width/16);
   triLinePSlope = createShape(TRIANGLE, 0, 0, 0, width/4, width/4, width/4);
   triLineNSlope = createShape(TRIANGLE, 0, 0, 0, width/4, width/4, width/4);
 
@@ -294,6 +295,8 @@ void draw() {
       skipPoints = 1;
       pushMatrix();
         hint(ENABLE_DEPTH_TEST);
+        directionalLight(255, 255, 255, 1, 1, -1);
+        directionalLight(127, 127, 127, -1, -1, 1);
         display();
       popMatrix();
 
@@ -350,42 +353,37 @@ void draw() {
       // oscP5.send(newMessage, myRemoteLocation);
       skipPoints = 3;
       pushMatrix();
-      //   hint(DISABLE_DEPTH_TEST); 
-      //   translate(-width/4, 0);
-         display();
+        //hint(ENABLE_DEPTH_TEST); 
+        display();
       popMatrix();
 
-      // pushMatrix();
-      // if(triangulation != null) {
-      //   for(int i = 0; i < meshData.length; i ++) {
-      //         triSqu = createShape(TRIANGLE, 0, 0, 0, width/((i + 1) * magnitude), width/((i + 1) * magnitude), width/((i + 1) * magnitude));
+      if(triangulation != null) {
+        for(int i = 0; i < triangulation.Vertices.length; i ++) {
+          for(int j = 0; j < triangulation.Vertices[i].length; j ++) {
+            triSqu = createShape(TRIANGLE, 0, 0, 0, width/((j + 1) * sketchRate * .05), width/((j + 1) * sketchRate * .05), width/((j + 1) * sketchRate * .05));
 
-      //         translate(width/2 + width/(((i + 1) * magnitude) * 2), height/2 - width/(((i + 1) * magnitude) * 2));
-      //         pushMatrix();
-      //         for(int k = 0; k < 4; k ++) {
-      //           triSqu.setStrokeWeight(0);
-      //           triSqu.setFill(color(map(k, 1, 4, 0, 360), 100, 100, random(10, 360)));
-      //           triSqu.rotate(PI/2);
-      //           shape(triSqu);
-      //           triSqu.translate(squTime, 0);
-      //         }
+            squDivision = (int)((j + 1) * sketchRate * .05);
 
-      //         if(limit == true) {
-      //           squTime -= .5;
-      //         }
-      //         else if(limit == false) {
-      //           squTime += .5;
-      //         }
-              
-      //         if (squTime >= width/(((i + 1) * magnitude)/2)) {
-      //            limit = true;
-      //         } else if (squTime < 0) limit = false;
-      //         popMatrix();
-      //   } 
-      // }
-      // popMatrix();
-
-    break;
+            triSqu.setStrokeWeight(0);
+            triSqu.setFill(color(map(i, 0, triangulation.Vertices.length, 0, 360), 100, 100, map(j, 0, triangulation.Vertices[i].length, 0, 360)));
+          }
+          pushMatrix();
+            noLights();
+            if(squDivision > 0) {
+              if(squDivision % 2 == 0) {
+                translate(0, height/2);
+                for(int k = 0; k < 3; k ++) {
+                  shape(triSqu, width/squDivision * i, 0);
+                  triSqu.rotate(PI/2);
+                  if(k % 2 != 0) translate(0, width/squDivision);
+                  else if(k % 2 == 0) translate(width/squDivision, 0);
+                }
+              }
+            }
+            popMatrix();
+        } 
+      }
+      break;
     case(4):
       // OscMessage newMessage = new OscMessage("/Copies");
       // newMessage.add(gestureVal);
